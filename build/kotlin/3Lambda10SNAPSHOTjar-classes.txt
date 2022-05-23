@@ -1,0 +1,1 @@
+E:\Ivan\Work\Students\Sergey\test_hw\Sequences\build\classes\kotlin\main\Chat.class;E:\Ivan\Work\Students\Sergey\test_hw\Sequences\build\classes\kotlin\main\Message.class;E:\Ivan\Work\Students\Sergey\test_hw\Sequences\build\classes\kotlin\main\Service.class

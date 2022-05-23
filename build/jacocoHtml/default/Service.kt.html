@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Service.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">3. Lambda</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">Service.kt</span></div><h1>Service.kt</h1><pre class="source lang-java linenums">
+<span class="fc" id="L2">class Service {</span>
+<span class="fc" id="L3">    private val chats: MutableList&lt;Chat&gt; = mutableListOf()</span>
+    private var currentChatId = 0
+    private fun getId(): Int {
+<span class="fc" id="L6">        currentChatId++</span>
+<span class="fc" id="L7">        return currentChatId</span>
+    }
+
+    fun getUnreadChatsCount(userId: Int):Int {
+<span class="fc" id="L11">        var count = 0</span>
+<span class="pc bpc" id="L12" title="3 of 6 branches missed.">        chats.filter { it.userId == userId || it.friendId == userId }.forEach {</span>
+<span class="pc bpc" id="L13" title="1 of 2 branches missed.">            if (!it.isRead())</span>
+<span class="fc" id="L14">                count++</span>
+<span class="fc" id="L15">        }</span>
+<span class="fc" id="L16">        return count</span>
+    }
+
+    fun getChats(userId: Int): Sequence&lt;Chat&gt; {
+<span class="fc bfc" id="L20" title="All 6 branches covered.">        return chats.filter { it.userId == userId || it.friendId == userId }.asSequence()</span>
+    }
+
+    fun getMessages(chatId: Int, messageId: Int, number: Int): Sequence&lt;Message&gt;? {
+<span class="pc bpc" id="L24" title="4 of 8 branches missed.">        val chat = chats.find { it.chatId == chatId } ?: return null</span>
+<span class="fc" id="L25">        chat.markMessagesAsRead(messageId, number)</span>
+<span class="fc" id="L26">        val index = chat.indexOfMessage(messageId)</span>
+<span class="fc" id="L27">        return chat.getMessages(index, number)</span>
+    }
+
+    fun removeMessage(chatId: Int, messageId: Int) {
+<span class="pc bpc" id="L31" title="3 of 6 branches missed.">        val chat = chats.find { it.chatId == chatId }</span>
+<span class="pc bpc" id="L32" title="1 of 2 branches missed.">        chat?.removeMessage(messageId)</span>
+<span class="pc bpc" id="L33" title="1 of 4 branches missed.">        if (chat?.isEmptyChat() == true) {</span>
+<span class="fc" id="L34">            chats.remove(chat)</span>
+        }
+<span class="fc" id="L36">    }</span>
+
+    fun sendMessage(userId: Int, friendId: Int, message: String) {
+<span class="fc bfc" id="L39" title="All 4 branches covered.">        if(message.isEmpty()){</span>
+<span class="fc" id="L40">            return</span>
+        }
+<span class="fc" id="L42">        var chat =</span>
+<span class="pc bpc" id="L43" title="1 of 12 branches missed.">            chats.find { (it.friendId == friendId &amp;&amp; it.userId == userId) || (it.userId == friendId &amp;&amp; it.friendId == userId) }</span>
+<span class="fc bfc" id="L44" title="All 2 branches covered.">        if (chat == null) {</span>
+<span class="fc" id="L45">            chat = Chat(userId, friendId, getId())</span>
+<span class="fc" id="L46">            chats.add(chat)</span>
+        }
+<span class="fc" id="L48">        chat.addMessage(Message(userId,getId(),message,1L,false))</span>
+<span class="fc" id="L49">    }</span>
+
+    fun deleteChat(chatId: Int) {
+<span class="fc bfc" id="L52" title="All 2 branches covered.">        chats.removeIf { it.chatId == chatId }</span>
+<span class="fc" id="L53">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

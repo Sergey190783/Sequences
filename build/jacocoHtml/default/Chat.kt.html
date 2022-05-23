@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Chat.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">3. Lambda</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">Chat.kt</span></div><h1>Chat.kt</h1><pre class="source lang-java linenums"><span class="fc" id="L1">class Chat(val userId: Int, val friendId: Int, val chatId: Int) {</span>
+<span class="fc" id="L2">    private val messages: MutableList&lt;Message&gt; = mutableListOf()</span>
+    fun addMessage(message: Message) {
+<span class="pc bpc" id="L4" title="2 of 4 branches missed.">        if (message.text.isNotEmpty())</span>
+<span class="fc" id="L5">            messages.add(message)</span>
+<span class="fc" id="L6">    }</span>
+
+    fun editMessage(id: Int, text: String) {
+<span class="pc bpc" id="L9" title="4 of 8 branches missed.">        messages.find { it.id == id }?.text = text</span>
+<span class="fc" id="L10">    }</span>
+
+    fun removeMessage(id: Int): Boolean {
+<span class="fc bfc" id="L13" title="All 2 branches covered.">        return messages.removeIf { it.id == id }</span>
+    }
+
+    fun isRead(): Boolean {
+<span class="fc" id="L17">        return messages.last().read</span>
+    }
+
+    fun getMessages(): Sequence&lt;Message&gt; {
+<span class="fc" id="L21">        return messages.asSequence()</span>
+    }
+
+    fun getMessages(index: Int, number: Int): Sequence&lt;Message&gt; {
+<span class="fc" id="L25">        return messages.subList(index, index + number).asSequence()</span>
+    }
+
+    fun markMessagesAsRead(messageId: Int, number: Int) {
+<span class="fc" id="L29">        val index = indexOfMessage(messageId)</span>
+<span class="pc bpc" id="L30" title="1 of 4 branches missed.">        for (i in index until index + number) {</span>
+<span class="fc" id="L31">            messages[i].read = true</span>
+        }
+<span class="fc" id="L33">    }</span>
+    fun indexOfMessage(messageId: Int):Int{
+<span class="pc bpc" id="L35" title="2 of 4 branches missed.">        return messages.indexOfFirst { it.id == messageId }</span>
+    }
+
+    fun isEmptyChat(): Boolean {
+<span class="fc" id="L39">        return messages.isEmpty()</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
